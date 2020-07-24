@@ -1,0 +1,310 @@
+selenium testing (udemy)
+Selenium :- is open source tool to automate web application accross multiple platforms
+
+##selenium components
+
+1) Selenium IDE:- Record and play. can not support larger projects (can be useful to record bug reproduction step)
+
+2) Selenium RC :- Selenium Remote Control (deprecated) 
+
+3) Selenium  WebDriver :- current and future of selenium
+
+4) Selenium Grid :- (Parallel/Sequential Execution) Designed to run test automation on multiple system in parallel 
+
+#Selenium WebDriver Architecture
+
+1) Selenium Client (automation code) :- language bindings :- Selenium bindings/ Client libraries in order to support multiple language. If we want to use python use python bindings
+pip install -U selenium
+Alternately, you can download the source distribution from PyPI (e.g. selenium-3.14.0.tar.gz), unarchive it, and run:
+
+python setup.py install
+Note: You may want to consider using virtualenv to create isolated Python environments.
+
+2) Browser Drivers :- fixfox driver, chrome, internet explorer, edge :- Drivers use to establish secure connection with the browser without revealing the internal logic of broswer's functionality
+When we execute a test script using WebDriver, the following operation perform internally
+
+1) HTTP request is generated and sent to the browser driver for each selenium command
+2) The driver receives the HTTP request through HTTP server
+3) HTTP server decides all the steps to perform instructions which are executed on broswer
+4) Execution status send back to HTTP server which is subsequently sent back to automation script 
+
+3) Browsers :- Browsers supported by Selenium WebDriver
+		1)Internet Explorer
+		2)Mozila 
+		3)Chrome 
+		4)Safari 
+		5)Edge
+
+## Behind the scene :- steps
+
+1) When we execute automation code, complete automation code will be conveted to JSON(javascript JavaScript Object Notation)
+
+2) Generated JSON is sent to browser driver through JSON Wire Protocol Over HTTP
+	JSON Wire Protocol:- JSON(JavaScript Object Notation) is open standard for exchanging data on web. 
+	It support data structure like object and array.So, it is easy to write and read data from JSON.
+	JSON wire protocol provides a transport mechanism to transfer data between a server and client
+	Industry standard for various REST web services  
+	
+3) Browser Driver executes commands on the respective browser over HTTP 
+
+4) Browser Driver gets response of the action back from the browser, which it sends back to the client
+
+# Interview Question :- Architecture of selenium :- explain the dig
+
+# How to find elements on firefox dev tool 
+1)click on element and -> right click -> inspect
+2) click item -> setting -> web developer -> inspect hover over DOM (document object model)
+**) Selenium web driver can not find iframe in DOM 
+3) go to console type xpath as follow to idendify element input having id="name"
+$x("//input[@id='name']")
+**) Do no create xpath which idendify more than one element 
+
+# How to find elements on chrome tool 
+: -> more tools -> developer tools 
+click on DOM and press cnt + f 
+2) cropath extention to find xpath 
+3) select element from DOM right click and cop xpath
+
+# Selenium Web driver installation 
+we are going to install selenium on the system and not on the pycharm
+steps 
+1) open cmd (as administrator)
+2) pip3 install selenium or on pycharm we can install package using python interpreter 
+3) Go to official site of selenium https://www.selenium.dev/downloads/ go to language bindings https://www.selenium.dev/selenium/docs/api/py/index.html
+4) Go to Driver section click on browser it will redirect to https://sites.google.com/a/chromium.org/chromedriver/downloads select version and download the version
+5) Check broswer version for 
+	Chrome steps 
+	1)  Click on the Menu icon in the upper right corner of the screen.
+	2) Click on Help, and then About Google Chrome.
+	3) Your Chrome browser version number can be found here. :- Version 83.0.4103.116
+	Mozila Firefox
+	1) Click the menu button 
+	2) click Help and select About Firefox
+6) Download driver 
+
+# Run test on chrome 
+1) import the driver using "from selenium import webdriver"
+2) invoke the driver using "driver = webdriver.
+	steps 
+	1)import webdriver from selenium using "from selenium import webdriver"
+	2)invoke browser specific driver using driver = webdriver.driver_name("path for the driver") 
+	3)called get() of driver to open the URL in broswer driver.get("URL")
+
+3) to run mozila or any browser smoothly add driver path to path variable D:\SeleniumUdemy\selenium_drivers\moziladriver
+
+# Find element by ID and Name
+from selenium import webdriver
+driver = webdriver.Chrome("")
+driver.find_element_by_id("name")
+driver.find_element_by_name("show-hide")
+
+# Dynamic ID's and selenium errors
+need to deal with it using xpath, dynamic id's changes every time we reload the web page and code generates errors
+
+# Find element by xpath and css
+from selenium import webdriver
+driver = webdriver.Chrome("")
+element_xpath = driver.find_element_by_xpath("//*[@id='name']")
+element_css = driver.find_element_by_css_selector("input#displayed-text.inputs.displayed-class") #value depeds on how css selectors are defined by dev 
+
+# Find element by Link text or partial link text 
+from selenium import webdriver
+driver = webdriver.Chrome("")
+element_link_text = driver.find_element_by_link_text("Practice")
+element_partial_text = driver.find_element_by_partial_link_text("acti")
+
+# Find element by class name or tag name
+from selenium import webdriver
+driver = webdriver.Chrome("")
+element_class = driver.find_element_by_class_name("displayed-class")
+element_tag = driver.find_element_by_tag_name("h2")
+text = element_tag.text
+
+# Understanding "by" class 
+method is find_element()
+driver.find_element(By.XPATH, "xpath epression")
+driver.find_element(By.ID, "name")
+
+# list of elements 
+driver.find_elements_by_id("name")
+driver.find_elements(By.TAG_NAME, "h1")
+
+# CSS selectors :- advanced selector
+syntax :- tag[attribute='value']
+		# -> Id
+		. -> class 
+
+	Element display exmples
+		input[id='displayed-text']
+		#displayed-text
+		input#displayed-text
+
+		input[class='inputs']
+		.displayed-class
+		input.displayed-class
+		input[class='inputs displayed-class'] #multiple value for attribute class 
+
+		.inputs.displayed-class # .class1.class2.class3 
+
+#Wild cards
+	^ :- start with
+	$ :- end with
+	* :- all 
+	Syntax :
+	tag[attribute wildcard ='value']
+	
+	input[class^='inputs'] #starting with inputs shows two
+	input[class$='displayed-class'] # match the value with ending #if we have multiple values 'class="inputs displayed-class"'
+	input[class*='inputs'] 
+	
+# Child node using css selector 
+	fieldset	->	10	matching	nodes
+	Fieldset>table
+	fieldset>#product	->	One	matching	node
+	fieldset>button	->	One	matching	node
+	Fieldset>a
+	fieldset>input#name
+
+# Xpath advanced level  (try to avoid absolute Xpath, 
+	two types of Xpath 
+	1) Absolute :- /html/body/header/div/div/div/div/ul/li[2]/a
+	2) Relative :- //*[@id="navbar"]//div/ul/li[2]/a 
+	
+	Every element does not have unique name, static id, unique link text. For those elements we need to build xpath to find element
+	Whatever we use to find element it should be unique 
+	
+	It should always find one matching node unless we want to find list of elements 
+	
+	difference between single '/' and double '//'
+	
+	1) Single '/' :-  anywhere in xpath signifies to look for the element immediately inside the parent element
+	2) Double '//' :- signifies to look for any child or nested child element inside the parent element 
+	
+	Syntax : tag[@attribute='value']
+	
+	How to build an effective Xpath 
+	/html/body/div[1]/div/div/div[2]/div[2]/div/div[1]/a/div/div[1]/img
+	try to build short xpath using "//" and "/" combination
+	//div/div[2]/div[2]//div[1]/img
+	
+	Using text to build effective Xpath
+		//div[@id="block-1754139"]/center/a[text()='View All Courses'] If we have multiple anchore tag under div tag 
+		
+	
+	Using contains keyword:- //div[@id="block-1754139"]/center/a[text()='View All Courses'] this will not locate element if text is having blank spaces to overcome this
+	we use contains 
+	//*[@id="navbar"]/div/div/div/ul//li/a[contains(text(),'Practice')]
+	
+	//*[@id="navbar"]/div/div/div/ul//li/a[contains(@class,'navbar-link')] Using this contains we found two element 
+	//*[@id="navbar"]/div/div/div/ul//li/a[contains(@class,'navbar-link') and contains(@href,'/sign_in')] we found 1 element
+
+	Using Starts-with keyword
+	//*[@id="navbar"]/div/div/div/ul//li/a[starts-with(@class,'navbar-link')] not use on dialy basis
+	
+	How to find parent and child
+	parent 
+	preceding-sibling
+	following-sibling
+		//a[@href='/sign_in']//parent::li//preceding-sibling::li//following-sibling::li
+	
+	Task Identify and get value 30 from table 
+		1) //table[@id='product']//td[text()='Python Programming Language']//following-sibling::td --> best one 
+		2) //td[text()='Python Programming Language']//following-sibling::td
+		3) //td[text()='JavaScript Programming Language']//parent::tr//preceding-sibling::tr//following-sibling::tr[2]/td[3]
+		
+		1)//div[@class='dhx_cell-content'][contains(text(),'Tracking System')]//parent::div/following-sibling::div[2]/div
+		2)//div[@title='Tracking System']//following-sibling::div[contains(@title,'In Progress')]//following-sibling::div[contains(@title,'Andrew Stewart')]//following-sibling::div[1]
+		
+# Browser interaction
+	from selenium import webdriver
+	import time
+	driver = webdriver.Chrome("")
+	driver.maximize_window()
+	driver.get(URL)
+	driver.implicitly_wait(10)
+	time.sleep(10)
+	print(driver.title)
+	print(driver.current_url)
+	driver.get(driver.current_url)
+	driver.back()
+	driver.forward()
+	driver.close()
+	driver.quit()
+
+# Click and send keys
+	from selenium import webdriver
+	from selenium.webdriver.common.by import By 
+	import time
+	driver = webdriver.Chrome("")
+	driver.get("")
+	loginButton = driver.find_element(By.XPATH, "//a[@class='btn btn-transparent']")
+	loginButton.click() #use to click 
+	time.wait(10)
+	emailField = driver.find_element(By.NAME, "email")
+	emailField.send_keys("mkulkarni53@gmail.com") #use to type on text field / send value 
+	passwordField = driver.find_element(By.NAME, "password")
+	passwordField.send_keys("P@ssword")
+	loginSubmit = driver.find_element(By.XPATH, "//button[contains(@class, 'btn-apropos-blue')]"
+	time.wait(10)
+	driver.close()
+
+# State of element
+	btn = driver.find_element(By.NAME, "submit")
+	isEnabled = button.is_enabled() # check if web element is enable or not
+	isSelected = btn.is_selected() #check if web element is selected or not (radio,check box)
+	isDisplayed = button.is_displayed() #check if web element is displayed on current screen or not 
+
+# Select tag - for dropdown (if dropdown list is not in select tag following code will not work)
+	from selenium import webdriver
+	from selenium.webdriver.support.select import Select
+	import time
+	driver = webdriver.Chrome("")
+	driver.get(URL)
+	list = driver.find_element_by_id("carselect")
+	selectElement = Select(list)
+	selectElement.select_by_index("2") #we can select element using string value
+	selectElement.select_by_value("benz") # we can select element using value attribute of list
+	selectElement.select_by_visible_text("BMW") #we can select element using visible text which display after clickling on dropdownlist
+
+# How to handle Hide element
+	1) Observed the DOM
+	2) Identify if element is hidden or not present in the DOM
+	3) IF hidden how it is going to be visible
+	4) Trigger the action 
+	
+# How to get text on the element
+	element = driver.find_element_by_id("name")
+	print(element.text)
+
+# How to find value of element attribute
+	driver = webdriver.get("")
+	element = driver.find_element_by_id("opentab")
+	print("text related to element", element.text)
+	print("attribute value of the element", element.get_attribute("target"))
+
+# Selenium web driver wait types :- if element is not loaded and not present in the DOM code will fail
+	Implicit Wait :- Apply to all web elements. wait till elements load into the DOM
+	Explicit Wait :- Apply to perticular element.
+	Steps for explicit wait
+	1) import statement
+		from selenium.webdriver.support.ui import WebDriverWait
+		from selenium.webdriver.support import expected_conditions as EC
+		from selenium.common.exceptions import *
+
+	2) define WebDriverWait instance
+		wait = WebDriverWait(driver, 10, poll_frequency=1,ignored_exceptions=[NoSuchElementException,ElementNotVisibleException,ElementNotSelectableException])
+	
+	3) wait until 
+		element = wait.until(EC.element_to_be_clickable((By.ID,"stopFilter_stops-0")))
+		element.click()
+
+
+	
+	
+	
+	import requests
+	from bs4 import BeautifulSoup
+	
+	res = requests.get(URL)
+	soup = BeautifulSoup(res.content, 'lxml')
+	
