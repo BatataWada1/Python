@@ -13,7 +13,7 @@ def setup(browser):
         driver = webdriver.Chrome("{0}".format(readConfig.chrome_driver_path()))
     elif browser == "firefox":
         logger.info("Running test on firefox browser")
-        driver = webdriver.Firefox("{0}".format(readConfig.chrome_driver_path()))
+        driver = webdriver.Firefox("{0}".format(readConfig.firefox_driver_path()))
     else:
         driver = webdriver.Chrome("{0}".format(readConfig.chrome_driver_path()))
     return driver
